@@ -1,13 +1,12 @@
 'use client';
 
-import { Input } from '@/components/Input';
+import { Card } from "@/components/ui/Card";
 
 export default function Home() {
   return (
     <div className="h-screen w-s">
-      <Input
-        placeholder='teste'
-      />
+      <>
+      </>
     </div>
   );
 }

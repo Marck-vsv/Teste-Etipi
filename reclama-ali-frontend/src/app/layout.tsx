@@ -1,22 +1,18 @@
-import { Toaster } from '@/components/Toaster';
+import { Toaster } from '@/components/ui/Toaster';
 import { ReactQueryProvider } from '@/providers/react-query-provider';
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist, Geist_Mono, Inter } from 'next/font/google';
 import './globals.css';
+import React from "react";
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
   title: 'Reclama Ali',
-  description: 'Teste técnico para ETIPI',
+  description: '',
 };
 
 export default function RootLayout({
@@ -27,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="pt">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} antialiased`}
       >
         <ReactQueryProvider>{children}</ReactQueryProvider>
         <Toaster />
