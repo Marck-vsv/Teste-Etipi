@@ -126,7 +126,7 @@ A aplicação estará disponível em [http://localhost:3000](http://localhost:30
 src/
 ├── app/                # Rotas e Layouts (Next.js App Router)
 │   ├── (auth)/         # Grupo de rotas para autenticação
-│   ├── (private)/      # Grupo de rotas protegidas (com layout de Navbar e Sidebar)
+│   ├── (private)/      # Grupo de rotas protegidas
 │   └── layout.tsx      # Layout raiz da aplicação (com AuthProvider e ReactQueryProvider)
 │
 ├── components/
