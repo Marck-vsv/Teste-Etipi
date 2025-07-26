@@ -80,7 +80,7 @@ Siga os passos abaixo para configurar e rodar o projeto em seu ambiente local.
 
 ### Pré-requisitos
 
-- [Node.js](https://nodejs.org/) (versão 18 ou superior)
+- [Node.js](https://nodejs.org/) (versão 23 ou superior)
 - [pnpm](https://pnpm.io/installation) (ou outro gerenciador de pacotes como npm ou yarn)
 
 ### 1. Clonar o Repositório
