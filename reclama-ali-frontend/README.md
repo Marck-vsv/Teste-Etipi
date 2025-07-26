@@ -127,7 +127,7 @@ src/
 ├── app/                # Rotas e Layouts (Next.js App Router)
 │   ├── (auth)/         # Grupo de rotas para autenticação
 │   ├── (private)/      # Grupo de rotas protegidas
-│   └── layout.tsx      # Layout raiz da aplicação (com AuthProvider e ReactQueryProvider)
+│   └── layout.tsx      # Layout raiz da aplicação
 │
 ├── components/
 │   ├── layout/         # Componentes de layout
