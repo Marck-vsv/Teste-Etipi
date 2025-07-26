@@ -74,6 +74,7 @@ export function ComplaintSummaryCard({ complaint }: ComplaintSummaryCardProps) {
                 onEdit={handleEdit}
                 onDelete={handleDelete}
                 onViewDetails={handleCardClick}
+                status={complaint.status}
               />
             </div>
           </div>

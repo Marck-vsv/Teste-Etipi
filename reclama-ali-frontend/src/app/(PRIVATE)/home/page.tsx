@@ -5,34 +5,15 @@ import { Complaint } from '@/features/complaints/schemas/complaint.schema';
 import { Button } from '@/components/ui/Button';
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
+import { useGetComplaints } from '@/features/complaints/queries/use-get-complaints.query';
 
 export default function Home() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const { data: paginatedData, isLoading } = useGetComplaints(currentPage);
 
-  const dummyComplaint: Complaint = {
-    id: '1',
-    title: 'Problema com a entrega',
-    description:
-      'Minha encomenda de número XXXXX atrasou e não consigo rastreá-la. Já tentei contato com a transportadora, mas sem sucesso. Preciso de uma solução urgente, pois o prazo de entrega já expirou há 3 dias.',
-    createdAt: new Date().toISOString(),
-    status: 'FECHADO',
-  };
-  const dummyComplaint2: Complaint = {
-    id: '2',
-    title: 'Problema com a entrega',
-    description:
-      'Minha encomenda de número XXXXX atrasou e não consigo rastreá-la. Já tentei contato com a transportadora, mas sem sucesso. Preciso de uma solução urgente, pois o prazo de entrega já expirou há 3 dias.',
-    createdAt: new Date().toISOString(),
-    status: 'EM_ANALISE',
-  };
-  const dummyComplaint3: Complaint = {
-    id: '3',
-    title: 'Problema com a entrega',
-    description:
-      'Minha encomenda de número XXXXX atrasou e não consigo rastreá-la. Já tentei contato com a transportadora, mas sem sucesso. Preciso de uma solução urgente, pois o prazo de entrega já expirou há 3 dias.',
-    createdAt: new Date().toISOString(),
-    status: 'PENDENTE',
-  };
+  const complaints = paginatedData?.content || [];
+  const totalPages = paginatedData?.totalPages || 0;
 
   return (
     <>
@@ -43,43 +24,36 @@ export default function Home() {
         </Button>
       </div>
       <div className="w-full flex flex-col justify-center items-center gap-6">
-          <ComplaintSummaryCard
-            complaint={dummyComplaint}
-          />
-          <ComplaintSummaryCard
-            complaint={dummyComplaint2}
-          />
-          <ComplaintSummaryCard
-            complaint={dummyComplaint3}
-          />
-          <ComplaintSummaryCard
-            complaint={dummyComplaint}
-          />
-          <ComplaintSummaryCard
-            complaint={dummyComplaint2}
-          />
-          <ComplaintSummaryCard
-            complaint={dummyComplaint3}
-          />
-          <ComplaintSummaryCard
-            complaint={dummyComplaint}
-          />
-          <ComplaintSummaryCard
-            complaint={dummyComplaint2}
-          />
-          <ComplaintSummaryCard
-            complaint={dummyComplaint3}
-          />
-          <ComplaintSummaryCard
-            complaint={dummyComplaint}
-          />
-          <ComplaintSummaryCard
-            complaint={dummyComplaint2}
-          />
-          <ComplaintSummaryCard
-            complaint={dummyComplaint3}
-          />
+        {isLoading ? (
+          <p>Carregando reclamações...</p>
+        ) : complaints.length > 0 ? (
+          complaints.map((complaint: Complaint) => (
+            <ComplaintSummaryCard key={complaint.id} complaint={complaint} />
+          ))
+        ) : (
+          <p>Nenhuma reclamação encontrada.</p>
+        )}
+      </div>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center space-x-4 mt-6">
+          <Button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
+            disabled={currentPage === 0}
+          >
+            Anterior
+          </Button>
+          <span>
+            Página {currentPage + 1} de {totalPages}
+          </span>
+          <Button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}
+            disabled={currentPage === totalPages - 1}
+          >
+            Próxima
+          </Button>
         </div>
+      )}
 
       <ComplaintFormModal
         isOpen={isCreateModalOpen}

@@ -24,8 +24,9 @@ api.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       console.error('Requisição não autorizada, token pode estar vencido.')
+      window.dispatchEvent(new Event('logout'))
     }
-    return Promise
+    return Promise.reject(error)
   }
 )
 

@@ -35,16 +35,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const storedUser = localStorage.getItem('authUser');
 
     if (storedToken && storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-        setToken(storedToken);
-      } catch (error) {
-        console.error('Falha em fazer parse do userInfo: ', error);
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('authUser');
-      }
+      setUser(JSON.parse(storedUser));
+      setToken(storedToken);
     }
     setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    const handleLogout = () => {
+      logout();
+    };
+
+    window.addEventListener('logout', handleLogout);
+
+    return () => {
+      window.removeEventListener('logout', handleLogout);
+    };
   }, []);
 
   const login = async (credentials: SignInRequest) => {

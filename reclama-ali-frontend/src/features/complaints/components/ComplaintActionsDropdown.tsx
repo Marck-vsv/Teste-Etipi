@@ -1,3 +1,4 @@
+import { Complaint } from '@/features/complaints/schemas/complaint.schema';
 import { Edit, Eye, MoreVertical, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -5,12 +6,14 @@ interface ComplaintActionsDropdownProps {
   onEdit: () => void;
   onDelete: () => void;
   onViewDetails: () => void;
+  status: Complaint['status'];
 }
 
 export function ComplaintActionsDropdown({
   onEdit,
   onDelete,
   onViewDetails,
+  status
 }: ComplaintActionsDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -74,32 +77,36 @@ export function ComplaintActionsDropdown({
               <Eye className="mr-2 h-4 w-4" />
               Ver detalhes
             </button>
-            <button
-              onClick={() => {
-                onEdit();
-                setIsOpen(false);
-              }}
-              className="cursor-pointer text-gray-700 flex px-4 py-2 text-sm w-full text-left hover:bg-gray-100"
-              role="menuitem"
-              tabIndex={-1}
-              id="menu-item-1"
-            >
-              <Edit className="mr-2 h-4 w-4" />
-              Editar
-            </button>
-            <button
-              onClick={() => {
-                onDelete();
-                setIsOpen(false);
-              }}
-              className="cursor-pointer text-red-600 flex px-4 py-2 text-sm w-full text-left hover:bg-red-50"
-              role="menuitem"
-              tabIndex={-1}
-              id="menu-item-2"
-            >
-              <Trash2 className="mr-2 h-4 w-4" />
-              Excluir
-            </button>
+            {status === 'PENDENTE' && (
+              <>
+                <button
+                  onClick={() => {
+                    onEdit();
+                    setIsOpen(false);
+                  }}
+                  className="cursor-pointer text-gray-700 flex px-4 py-2 text-sm w-full text-left hover:bg-gray-100"
+                  role="menuitem"
+                  tabIndex={-1}
+                  id="menu-item-1"
+                >
+                  <Edit className="mr-2 h-4 w-4" />
+                  Editar
+                </button>
+                <button
+                  onClick={() => {
+                    onDelete();
+                    setIsOpen(false);
+                  }}
+                  className="cursor-pointer text-red-600 flex px-4 py-2 text-sm w-full text-left hover:bg-red-50"
+                  role="menuitem"
+                  tabIndex={-1}
+                  id="menu-item-2"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Excluir
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}

@@ -4,10 +4,15 @@ import type {
   CreateComplaintRequest,
   UpdateComplaintRequest,
 } from '../schemas/complaint.schema';
-import { UpdateComplaintStatusRequest } from '../schemas/complaint.schema';
+import {
+  PaginatedComplaintsResponse,
+  UpdateComplaintStatusRequest,
+} from '../schemas/complaint.schema';
 
-export const getComplaints = async () => {
-  const { data } = await api.get(complaintEndpoints.getAll());
+export const getComplaints = async (page: number, size: number) => {
+  const { data } = await api.get<PaginatedComplaintsResponse>(
+    complaintEndpoints.getAll(page, size),
+  );
   return data;
 };
 

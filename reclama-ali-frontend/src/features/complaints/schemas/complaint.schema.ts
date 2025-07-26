@@ -36,6 +36,11 @@ export const updateComplaintStatusSchema = complaintSchema.pick({
 export type Complaint = z.infer<typeof complaintSchema>;
 export type CreateComplaintRequest = z.infer<typeof createComplaintSchema>;
 export type UpdateComplaintRequest = z.infer<typeof updateComplaintSchema>;
-export type UpdateComplaintStatusRequest = z.infer<
-  typeof updateComplaintStatusSchema
->;
+export type UpdateComplaintStatusRequest = z.infer<typeof updateComplaintStatusSchema>;
+export type PaginatedComplaintsResponse = {
+  content: Complaint[];
+  totalPages: number;
+  totalElements: number;
+  page: number;
+  size: number;
+};
