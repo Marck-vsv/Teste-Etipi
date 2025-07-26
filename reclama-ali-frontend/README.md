@@ -14,20 +14,32 @@ Este é o frontend do projeto **Reclama Ali**, uma plataforma para registro e vi
 
 ## Visão Geral da Arquitetura
 
-A principal decisão arquitetural deste projeto foi a adoção de uma **Arquitetura Baseada em Features (Feature-Based Architecture)**.
+Minha principal decisão arquitetural para este projeto foi a adoção de uma **Arquitetura Orientada a Features (Feature-Driven Architecture)**. Esta abordagem difere da organização tradicional por tipo de arquivo, optando por agrupar o código com base em funcionalidades de negócio.
 
-### O que é?
+### Fundamentação da Escolha
 
-Em vez de organizar o código por tipo de arquivo (ex: uma pasta para todos os componentes, outra para todos os serviços), nós organizamos o código por funcionalidade de negócio. Cada "feature" (como `auth` ou `complaints`) é um módulo autocontido que possui seus próprios componentes, serviços, hooks e schemas.
+Em vez de diretórios como `components`, `services` ou `hooks` globais, cada funcionalidade de negócio (`auth`, `complaints`) é tratada como um módulo autocontido. Isso significa que todos os componentes, hooks, schemas de validação, constantes e serviços de API relacionados a uma feature específica residem em seu próprio diretório (`src/features/[nome-da-feature]`).
 
-### Por que essa abordagem?
+### Benefícios Estratégicos
 
-- **Escalabilidade:** Adicionar uma nova funcionalidade (ex: "perfil do usuário") é tão simples quanto criar um novo diretório em `src/features`. O impacto no código existente é mínimo.
-- **Manutenibilidade:** Quando um bug precisa ser corrigido ou uma funcionalidade alterada, todos os arquivos relevantes estão no mesmo lugar, facilitando a localização e a modificação do código.
-- **Co-localização:** A lógica de uma feature está co-localizada, o que torna o código mais fácil de entender e raciocinar sobre.
-- **Autonomia:** Em um cenário de equipe, diferentes desenvolvedores podem trabalhar em features distintas com menor risco de conflitos.
+Esta escolha arquitetural oferece vantagens significativas:
 
-As features se comunicam com o resto da aplicação de forma controlada, principalmente através de **Provedores de Contexto** (como o `AuthProvider`) e do sistema de **Roteamento** do Next.js.
+-   **Escalabilidade e Manutenibilidade:** A adição de novas funcionalidades (e.g., um módulo de `perfil-do-usuário`) torna-se um processo isolado, minimizando o impacto no código existente. Isso facilita a expansão do projeto e a correção de bugs, pois todas as partes relevantes de uma funcionalidade estão co-localizadas.
+-   **Clareza e Co-localização:** A lógica de negócio de cada feature é encapsulada, tornando o código mais intuitivo de entender e raciocinar sobre. Desenvolvedores podem focar em uma funcionalidade sem se perder em uma estrutura de diretórios dispersa.
+-   **Autonomia da Equipe:** Em ambientes de desenvolvimento colaborativos, essa estrutura permite que diferentes membros da equipe trabalhem em features distintas com menor risco de conflitos e dependências cruzadas.
+-   **Reusabilidade Controlada:** Componentes de UI genéricos (`src/components/ui/`) e de layout (`src/components/layout/`) são desenvolvidos de forma agnóstica ao domínio, promovendo a reutilização sem introduzir acoplamento indesejado entre as features.
+
+### Integração Tecnológica
+
+Para suportar esta arquitetura, foram selecionadas tecnologias que complementam e reforçam seus princípios:
+
+-   **Next.js (App Router):** Seu sistema de roteamento e layouts (`src/app/(grupo)/layout.tsx`) é fundamental para aplicar estruturas visuais e lógicas específicas a diferentes seções da aplicação (e.g., rotas autenticadas vs. não autenticadas), mantendo a separação de preocupações.
+-   **TanStack Query (React Query):** Essencial para o gerenciamento do estado do servidor. Ele permite que as features lidem com fetching, caching, sincronização e atualização de dados de forma declarativa e eficiente, reduzindo o boilerplate e melhorando a experiência do desenvolvedor.
+-   **Context API (React):** Utilizada para gerenciar estados globais que não são de servidor, como o estado de autenticação (`AuthContext`). Isso permite que informações cruciais sejam acessíveis em toda a aplicação de forma controlada, sem a necessidade de prop-drilling excessivo.
+-   **Zod e React Hook Form:** Garantem a validação robusta de dados e a construção eficiente de formulários, com os schemas de validação residindo diretamente nas features correspondentes.
+-   **Axios com Interceptores:** O cliente HTTP é configurado globalmente com interceptores (e.g., para anexar o token JWT), centralizando a lógica de comunicação com a API e garantindo que as features não precisem se preocupar com detalhes de autenticação em cada requisição.
+
+Esta combinação de arquitetura e tecnologias visa entregar uma aplicação robusta, escalável e de fácil manutenção.
 
 ---
 
@@ -39,13 +51,13 @@ As features se comunicam com o resto da aplicação de forma controlada, princip
 - Validação de formulários em tempo real com Zod.
 - Feedback ao usuário com toasts (notificações) para sucesso e erro.
 
-### Gestão de Reclamações (a ser implementado na UI)
-- **Criação (Create):** Endpoint e lógica para criar novas reclamações.
-- **Leitura (Read):** Endpoints para buscar a lista de reclamações e os detalhes de uma reclamação específica.
-- **Atualização (Update):**
-    - Endpoint para atualizar o conteúdo (título/descrição) de uma reclamação.
-    - Endpoint dedicado para atualizar apenas o **status** da reclamação.
-- **Exclusão (Delete):** Endpoint para remover uma reclamação.
+### Gestão de Reclamações
+- **Criação (Create):** Implementação de um modal reutilizável (`ComplaintFormModal`) para criar novas reclamações.
+- **Leitura (Read):**
+    - Listagem de reclamações (`ComplaintSummaryCard`) com resumo (título, descrição truncada, status, data).
+    - Visualização de detalhes de uma reclamação específica através de um modal (`ComplaintDetailsModal`).
+- **Atualização (Update):** Implementação do modal reutilizável (`ComplaintFormModal`) para edição de reclamações existentes.
+- **Exclusão (Delete):** Implementação de um modal de confirmação (`ConfirmationModal`) antes da exclusão de uma reclamação.
 
 ---
 
@@ -114,16 +126,17 @@ A aplicação estará disponível em [http://localhost:3000](http://localhost:30
 src/
 ├── app/                # Rotas e Layouts (Next.js App Router)
 │   ├── (auth)/         # Grupo de rotas para autenticação
-│   ├── (private)/      # Grupo de rotas protegidas
-│   └── layout.tsx      # Layout raiz da aplicação
+│   ├── (private)/      # Grupo de rotas protegidas (com layout de Navbar e Sidebar)
+│   └── layout.tsx      # Layout raiz da aplicação (com AuthProvider e ReactQueryProvider)
 │
 ├── components/
-│   └── ui/             # Componentes de UI genéricos e reutilizáveis (Button, Card, etc.)
+│   ├── layout/         # Componentes de layout (Navbar, Sidebar)
+│   └── ui/             # Componentes de UI genéricos e reutilizáveis (Button, Card, Modal, Input, TextArea, Badge, ConfirmationModal, Toaster)
 │
 ├── features/           # Coração da arquitetura, cada pasta é uma feature
 │   ├── auth/           # Feature de Autenticação
 │   └── complaints/     # Feature de Reclamações
-│       ├── components/ # Componentes React específicos da feature
+│       ├── components/ # Componentes React específicos da feature (ComplaintSummaryCard, ComplaintActionsDropdown, ComplaintFormModal, ComplaintDetailsModal)
 │       ├── constants/  # Constantes (ex: URLs de endpoints)
 │       ├── mutations/  # Hooks de mutação (create, update, delete) do React Query
 │       ├── queries/    # Hooks de query (read) do React Query
@@ -131,12 +144,15 @@ src/
 │       └── services/   # Funções que interagem com a API
 │
 ├── lib/                # Código compartilhado que não pertence a nenhuma feature
-│   └── api.ts          # Configuração da instância do Axios
+│   └── api.ts          # Configuração da instância do Axios (com interceptor para JWT)
 │
 ├── providers/          # Provedores de Contexto React
-│   ├── auth-provider.tsx # (A ser criado) Gerencia o estado de autenticação
 │   └── react-query-provider.tsx
 │
+├── contexts/           # Contextos React (ex: AuthContext)
+│   └── AuthContext.tsx # Gerencia o estado de autenticação
+│
 └── utils/              # Funções utilitárias genéricas
+    ├── formatters.ts   # Funções de formatação (ex: datas)
     └── validators.ts
 ```
