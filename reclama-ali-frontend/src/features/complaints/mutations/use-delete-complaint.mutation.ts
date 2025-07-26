@@ -16,5 +16,13 @@ export const useDeleteComplaint = () => {
         description: error.message || 'Ocorreu um erro inesperado.',
       });
     },
+    onMutate: () => {
+      toast.loading('Deletando sua reclamação...', {
+        id: 'delete-complaint-loading',
+      });
+    },
+    onSettled: () => {
+      toast.dismiss('delete-complaint-loading');
+    },
   });
 };
