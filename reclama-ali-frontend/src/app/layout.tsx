@@ -1,9 +1,10 @@
 import { Toaster } from '@/components/ui/Toaster';
 import { ReactQueryProvider } from '@/providers/react-query-provider';
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Inter } from 'next/font/google';
+import { Inter } from 'next/font/google';
+import React from 'react';
+import { AuthProvider } from '../contexts/AuthContext';
 import './globals.css';
-import React from "react";
 
 const inter = Inter({
   variable: '--font-inter',
@@ -22,10 +23,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt">
-      <body
-        className={`${inter.variable} antialiased`}
-      >
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+      <body className={`${inter.variable} antialiased`}>
+        <ReactQueryProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ReactQueryProvider>
         <Toaster />
       </body>
     </html>

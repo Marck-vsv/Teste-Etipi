@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 export function useSignUpMutation() {
   return useMutation({
     mutationFn: async (data: SignUpRequest) => {
-      return (await signUp(data)) as unknown as Promise<SignUpRequest>;
+      return await signUp(data);
     },
     onSuccess: () => {
       toast.success('Conta criada com sucesso!');

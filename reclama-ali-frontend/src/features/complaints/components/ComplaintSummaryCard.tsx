@@ -38,7 +38,7 @@ export function ComplaintSummaryCard({ complaint }: ComplaintSummaryCardProps) {
 
   const truncatedDescription =
     complaint.description.length > 100
-      ? complaint.description.substring(0, 70) + '...'
+      ? complaint.description.substring(0, 90) + '...'
       : complaint.description;
 
   const handleDelete = () => {

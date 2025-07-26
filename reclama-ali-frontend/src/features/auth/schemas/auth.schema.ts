@@ -32,5 +32,6 @@ export type LoginResponse = {
     cpf: string;
     name: string;
   };
+  token: string;
 };
 export type SignUpRequest = z.infer<typeof signUpSchema>;

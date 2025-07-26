@@ -2,21 +2,20 @@
 
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { useSignInMutation } from '@/features/auth/mutations/use-sign-in.mutation';
+import { useAuth } from '@/contexts/AuthContext';
 import {
   type SignInRequest,
   signInSchema,
 } from '@/features/auth/schemas/auth.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeClosed, PersonStandingIcon } from 'lucide-react';
+import { Eye, EyeClosed } from 'lucide-react';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 export function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const { mutate: mutateSignIn, isPending: signInPending } =
-    useSignInMutation();
+  const { login, isLoading: isAuthLoading } = useAuth();
 
   const {
     register,
@@ -27,13 +26,17 @@ export function SignInForm() {
     resolver: zodResolver(signInSchema),
   });
 
-  function onSubmit(data: SignInRequest) {
+  async function onSubmit(data: SignInRequest) {
     if (!data.cpf.trim() || !data.password.trim()) {
       toast.error('Preencha todos os campos obrigatórios');
       return;
     }
-    mutateSignIn(data);
+    try {
+      await login(data);
+    } catch (error) {}
   }
+
+  const signInPending = isAuthLoading;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
