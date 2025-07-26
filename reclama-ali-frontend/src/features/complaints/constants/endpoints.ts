@@ -1,7 +1,7 @@
-const baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/complaints`;
+const baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/complaints`;
 
 export const complaintEndpoints = {
-  getComplaintsSummary: (page: number, size: number) =>
+  summary: (page: number, size: number) =>
     `${baseUrl}?page=${page}&size=${size}`,
   getById: (id: string) => `${baseUrl}/${id}`,
   create: () => baseUrl,

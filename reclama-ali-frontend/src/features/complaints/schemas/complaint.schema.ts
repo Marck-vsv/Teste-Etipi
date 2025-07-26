@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 export const complaintStatusSchema = z.enum([
   'PENDENTE',
-  'EM_ANALISE',
   'RESOLVIDO',
   'FECHADO',
 ]);

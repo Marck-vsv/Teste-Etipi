@@ -11,7 +11,7 @@ import {
 
 export const getComplaints = async (page: number, size: number) => {
   const { data } = await api.get<PaginatedComplaintsResponse>(
-    complaintEndpoints.getComplaintsSummary(page, size),
+    complaintEndpoints.summary(page, size),
   );
   return data;
 };
