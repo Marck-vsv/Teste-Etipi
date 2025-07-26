@@ -130,13 +130,13 @@ src/
 │   └── layout.tsx      # Layout raiz da aplicação (com AuthProvider e ReactQueryProvider)
 │
 ├── components/
-│   ├── layout/         # Componentes de layout (Navbar, Sidebar)
-│   └── ui/             # Componentes de UI genéricos e reutilizáveis (Button, Card, Modal, Input, TextArea, Badge, ConfirmationModal, Toaster)
+│   ├── layout/         # Componentes de layout
+│   └── ui/             # Componentes de UI genéricos e reutilizáveis
 │
 ├── features/           # Coração da arquitetura, cada pasta é uma feature
 │   ├── auth/           # Feature de Autenticação
 │   └── complaints/     # Feature de Reclamações
-│       ├── components/ # Componentes React específicos da feature (ComplaintSummaryCard, ComplaintActionsDropdown, ComplaintFormModal, ComplaintDetailsModal)
+│       ├── components/ # Componentes React específicos da feature
 │       ├── constants/  # Constantes (ex: URLs de endpoints)
 │       ├── mutations/  # Hooks de mutação (create, update, delete) do React Query
 │       ├── queries/    # Hooks de query (read) do React Query
