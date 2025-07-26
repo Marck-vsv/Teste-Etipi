@@ -105,7 +105,7 @@ const cardDescriptionVariants = cva('text-gray-500', {
 
 // --------------------------------------
 
-interface BodyProps
+export interface BodyProps
   extends ComponentProps<'div'>,
     VariantProps<typeof cardVariants> {
   children: ReactNode;
@@ -126,7 +126,7 @@ Body.displayName = 'CardBody';
 
 // --------------------------------------
 
-interface HeaderProps
+export interface HeaderProps
   extends ComponentProps<'div'>,
     VariantProps<typeof cardHeaderVariants> {
   children: ReactNode;
@@ -147,7 +147,7 @@ Header.displayName = 'CardHeader';
 
 // --------------------------------------
 
-interface TitleProps
+export interface TitleProps
   extends ComponentProps<'h3'>,
     VariantProps<typeof cardTitleVariants> {
   children: ReactNode;
@@ -164,7 +164,7 @@ Title.displayName = 'CardTitle';
 
 // --------------------------------------
 
-interface DescriptionProps
+export interface DescriptionProps
   extends ComponentProps<'p'>,
     VariantProps<typeof cardDescriptionVariants> {
   children: ReactNode;
@@ -185,7 +185,7 @@ Description.displayName = 'CardDescription';
 
 // --------------------------------------
 
-interface ContentProps
+export interface ContentProps
   extends ComponentProps<'div'>,
     VariantProps<typeof cardContentVariants> {
   children: ReactNode;
@@ -206,7 +206,7 @@ Content.displayName = 'CardContent';
 
 // --------------------------------------
 
-interface FooterProps
+export interface FooterProps
   extends ComponentProps<'div'>,
     VariantProps<typeof cardFooterVariants> {
   children: ReactNode;
