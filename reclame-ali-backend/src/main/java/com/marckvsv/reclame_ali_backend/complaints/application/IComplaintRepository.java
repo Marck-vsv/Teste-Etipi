@@ -15,10 +15,10 @@ public interface IComplaintRepository {
 
     void delete(DeleteComplaintCommand id);
 
-    Page<ComplaintResponse> getPage(PageSummaryQuery query);
+    Page<ComplaintResponse> getPage(PageSummaryQuery query, UUID userID);
 
     void createCompliant(UUID userID, CreateComplaintRequest createComplaintRequest);
 
-    ComplaintResponse UpdateComplaint(UpdateComplaintCommand command);
+    ComplaintResponse updateComplaint(UpdateComplaintCommand command);
 
 }

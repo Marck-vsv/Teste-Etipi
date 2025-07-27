@@ -28,10 +28,10 @@ export const signUpSchema = z.object({
 
 export type SignInRequest = z.infer<typeof signInSchema>;
 export type LoginResponse = {
-  userInfo: {
-    cpf: string;
-    name: string;
-  };
+  // userInfo: {
+  //   name: string;
+  //   uuid: string;
+  // };
   token: string;
 };
 export type SignUpRequest = z.infer<typeof signUpSchema>;

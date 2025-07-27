@@ -1,5 +1,6 @@
 package com.marckvsv.reclame_ali_backend.complaints.application;
 
+import com.marckvsv.reclame_ali_backend.administration.security.configuration.jwt.IJWTUtils;
 import com.marckvsv.reclame_ali_backend.complaints.api.IComplaintApplication;
 import com.marckvsv.reclame_ali_backend.complaints.api.cqrs.commands.CreateComplaintCommand;
 import com.marckvsv.reclame_ali_backend.complaints.api.cqrs.commands.DeleteComplaintCommand;
@@ -15,14 +16,14 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class ApplicationClient implements IComplaintApplication {
+public class ComplaintsApplicationClient implements IComplaintApplication {
 
     private final IJWTUtils jwtUtils;
     private final IComplaintRepository repository;
 
     @Override
     public void createComplaint(CreateComplaintCommand command) {
-        UUID userID = jwtUtils.decode(command.getJwt());
+        UUID userID = UUID.fromString(jwtUtils.extractUsername(command.getJwt()));
 
         repository.createCompliant(userID, command.getCreateComplaintRequest());
 
@@ -30,7 +31,7 @@ public class ApplicationClient implements IComplaintApplication {
 
     @Override
     public ComplaintResponse updateComplaint(UpdateComplaintCommand command) {
-        return repository.UpdateComplaint(command);
+        return repository.updateComplaint(command);
     }
 
     @Override
@@ -40,7 +41,9 @@ public class ApplicationClient implements IComplaintApplication {
 
     @Override
     public Page<ComplaintResponse> getSummaryPage(PageSummaryQuery query) {
-        return repository.getPage(query);
+        UUID userID = UUID.fromString(jwtUtils.extractUsername(query.getJwt()));
+
+        return repository.getPage(query, userID);
     }
 
     @Override

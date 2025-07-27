@@ -8,6 +8,7 @@ import com.marckvsv.reclame_ali_backend.complaints.api.cqrs.query.PageSummaryQue
 import com.marckvsv.reclame_ali_backend.complaints.api.dto.ComplaintResponse;
 import com.marckvsv.reclame_ali_backend.complaints.api.dto.CreateComplaintRequest;
 import com.marckvsv.reclame_ali_backend.complaints.api.dto.UpdateComplaintRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,8 @@ public class ComplaintController {
 
     private final IComplaintApplication application;
 
-    //TODO: fazer example matcher p jwt
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody CreateComplaintRequest request, @RequestHeader(name = "Authorization") String jwt) {
+    public ResponseEntity<Void> create(@Valid @RequestBody CreateComplaintRequest request, @RequestHeader(name = "Authorization") String jwt) {
         var command = new CreateComplaintCommand(request, jwt);
 
         application.createComplaint(command);
@@ -33,8 +33,8 @@ public class ComplaintController {
     }
 
     @GetMapping("/summary")
-    public ResponseEntity<Page<ComplaintResponse>> pageableSummary(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size) {
-        var pageSummaryQuery = new PageSummaryQuery(page, size);
+    public ResponseEntity<Page<ComplaintResponse>> pageableSummary(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size, @RequestHeader(name = "Authorization") String jwt) {
+        var pageSummaryQuery = new PageSummaryQuery(page, size, jwt);
 
         return ResponseEntity.ok(application.getSummaryPage(pageSummaryQuery));
     }
@@ -47,7 +47,7 @@ public class ComplaintController {
     }
 
     @PatchMapping("/{uuid}")
-    public ResponseEntity<ComplaintResponse> updateComplaint(@RequestBody UpdateComplaintRequest request, @PathVariable UUID uuid) {
+    public ResponseEntity<ComplaintResponse> updateComplaint(@Valid @RequestBody UpdateComplaintRequest request, @PathVariable UUID uuid) {
         var command = new UpdateComplaintCommand(request, uuid);
 
         return ResponseEntity.ok(application.updateComplaint(command));

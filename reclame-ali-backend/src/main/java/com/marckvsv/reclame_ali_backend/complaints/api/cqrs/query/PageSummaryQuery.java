@@ -13,4 +13,5 @@ import lombok.Setter;
 public class PageSummaryQuery extends BaseQuery {
     private Integer page;
     private Integer size;
+    private String jwt;
 }
