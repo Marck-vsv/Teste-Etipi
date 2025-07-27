@@ -144,7 +144,7 @@ A API é versionada com `/api/v1`.
 ## Configuração e Execução
 
 1.  **Pré-requisitos:**
-    *   Java 17+
+    *   Java 24
     *   Maven
     *   Banco de dados MySQL/PostgreSQL (configurado em `application.properties`)
 
