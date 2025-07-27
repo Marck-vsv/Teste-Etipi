@@ -32,7 +32,7 @@ export default function PrivateLayout({
     <div className="flex flex-col h-screen">
       <Navbar
         appName='Reclame Ali'
-        userName={user?.name || 'Usuário'}
+        userName={user?.userInfo?.name || 'Usuário'}
         onLogout={logout}
       />
       <div className='flex flex-grow overflow-hidden'>

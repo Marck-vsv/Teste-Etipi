@@ -20,18 +20,12 @@ export const signUpSchema = z.object({
     .max(14, { message: 'O CPF deve possuir pelo menos 11 digitos.' })
     .transform((val) => val.replace(/[^\d]/g, ''))
     .refine(isValidCPF, { message: 'CPF inválido' }),
-  name: z.string(),
+  name: z.string().min(1, 'Você deve inserir seu nome.'),
   password: z
     .string()
     .min(8, { message: 'A senha deve possuir ao menos 8 caracteres.' }),
 });
 
 export type SignInRequest = z.infer<typeof signInSchema>;
-export type LoginResponse = {
-  // userInfo: {
-  //   name: string;
-  //   uuid: string;
-  // };
-  token: string;
-};
 export type SignUpRequest = z.infer<typeof signUpSchema>;
+export type LoginResponse = string;

@@ -13,8 +13,6 @@ const getStatusBadgeVariant = (status: Complaint['status']) => {
   switch (status) {
     case 'PENDENTE':
       return 'warning';
-    case 'EM_ANALISE':
-      return 'secondary';
     case 'RESOLVIDO':
       return 'success';
     case 'FECHADO':

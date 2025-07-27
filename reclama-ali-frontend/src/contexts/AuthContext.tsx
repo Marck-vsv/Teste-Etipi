@@ -1,16 +1,24 @@
-"use client"
-import {
-  LoginResponse,
-  SignInRequest,
-} from '@/features/auth/schemas/auth.schema';
+'use client';
+import { SignInRequest } from '@/features/auth/schemas/auth.schema';
 import { signIn } from '@/features/auth/services/auth.service';
+import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'next/navigation';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
+interface DecodedToken {
+  sub: string;
+  userInfo: {
+    name: string;
+  };
+  iat: number;
+  exp: number;
+}
+
 interface AuthContextType {
-  user: LoginResponse['userInfo'] | null;
+  user: DecodedToken | null;
   token: string | null;
+  decodedToken: DecodedToken | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (credentials: SignInRequest) => Promise<void>;
@@ -24,32 +32,46 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<LoginResponse['userInfo'] | null>(null);
+  const [user, setUser] = useState<DecodedToken | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [decodedToken, setDecodedToken] = useState<DecodedToken | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
 
+  const decodeAndSetAuth = (jwtToken: string) => {
+    try {
+      const decoded: DecodedToken = jwtDecode(jwtToken);
+      setDecodedToken(decoded);
+      setUser(decoded);
+    } catch (error) {
+      console.error('Failed to decode token:', error);
+      setDecodedToken(null);
+      setUser(null);
+    }
+  };
+
   useEffect(() => {
     const storedToken = localStorage.getItem('authToken');
-    const storedUser = localStorage.getItem('authUser');
 
-    if (storedToken && storedUser) {
-      setUser(JSON.parse(storedUser));
+    if (storedToken && storedToken.length > 0) {
       setToken(storedToken);
+      decodeAndSetAuth(storedToken);
+    } else {
+      console.warn('No valid token found in localStorage.');
     }
     setIsLoading(false);
   }, []);
 
   useEffect(() => {
-    const handleLogout = () => {
+    const handleLogoutEvent = () => {
       logout();
     };
 
-    window.addEventListener('logout', handleLogout);
+    window.addEventListener('logout', handleLogoutEvent);
 
     return () => {
-      window.removeEventListener('logout', handleLogout);
+      window.removeEventListener('logout', handleLogoutEvent);
     };
   }, []);
 
@@ -57,13 +79,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setIsLoading(true);
     try {
       const response = await signIn(credentials);
-      const fetchedUser = response.data.userInfo;
-      const fetchedToken = response.data.token;
+      const fetchedToken = String(response.data);
 
-      setUser(fetchedUser);
       setToken(fetchedToken);
+
+      if (fetchedToken && fetchedToken.length > 0) {
+        decodeAndSetAuth(fetchedToken);
+      } else {
+        console.error('Received token is empty or invalid:', fetchedToken);
+      }
+
       localStorage.setItem('authToken', fetchedToken);
-      localStorage.setItem('authUser', JSON.stringify(fetchedUser));
 
       toast.success('Login realizado com sucesso!');
       router.push('/home');
@@ -80,8 +106,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = () => {
     setUser(null);
     setToken(null);
+    setDecodedToken(null);
     localStorage.removeItem('authToken');
-    localStorage.removeItem('authUser');
     toast.info('Sessão encerrada');
     router.push('/auth');
   };
@@ -90,7 +116,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return (
     <AuthContext.Provider
-      value={{ user, token, isAuthenticated, isLoading, login, logout }}
+      value={{
+        user,
+        token,
+        decodedToken,
+        isAuthenticated,
+        isLoading,
+        login,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>

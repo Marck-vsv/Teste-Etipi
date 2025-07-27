@@ -2,13 +2,17 @@ import type { SignInRequest } from '@/features/auth/schemas/auth.schema';
 import { signIn } from '@/features/auth/services/auth.service';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { useAuth } from '@/contexts/AuthContext';
 
 export function useSignInMutation() {
+  const { login } = useAuth();
+
   return useMutation({
     mutationFn: async (data: SignInRequest) => {
-      return (await signIn(data)) as unknown as Promise<SignInRequest>;
+      return (await signIn(data));
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      login(data);
       toast.success('Login realizado com sucesso!');
     },
     onError: (error) => {

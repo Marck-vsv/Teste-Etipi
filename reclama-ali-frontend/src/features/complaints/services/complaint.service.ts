@@ -9,9 +9,9 @@ import {
   UpdateComplaintStatusRequest,
 } from '../schemas/complaint.schema';
 
-export const getComplaints = async (page: number, size: number) => {
+export const getComplaints = async (page: number) => {
   const { data } = await api.get<PaginatedComplaintsResponse>(
-    complaintEndpoints.summary(page, size),
+    complaintEndpoints.summary(page),
   );
   return data;
 };
@@ -34,14 +34,6 @@ export const updateComplaint = async (
     complaintEndpoints.updateComplaint(id),
     body,
   );
-  return data;
-};
-
-export const updateComplaintStatus = async (
-  id: string,
-  body: UpdateComplaintStatusRequest,
-) => {
-  const { data } = await api.patch(complaintEndpoints.updateStatus(id), body);
   return data;
 };
 
