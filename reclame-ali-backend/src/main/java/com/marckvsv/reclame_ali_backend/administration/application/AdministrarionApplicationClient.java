@@ -51,7 +51,7 @@ public class AdministrarionApplicationClient implements IUserApplication {
     @Override
     public Void createAccount(CreateAccountCommand command) {
         //Todo: Isso deve ser feito na camada de infra
-        if (userRepository.existByCFP()) {
+        if (userRepository.existByCPF(command.getCreateAccountRequest().getCpf())) {
             throw new BadCredentialsException("User already exists");
         }
         String encodedPassword = passwordEncoder.encode(command.getCreateAccountRequest().getPassword());

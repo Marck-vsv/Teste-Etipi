@@ -9,7 +9,7 @@ public interface IUserRepository {
 
     UUID getUUIDByCPF(String cpf);
 
-    boolean existByCFP();
+    boolean existByCPF(String cpf);
 
     void save(User user);
 }

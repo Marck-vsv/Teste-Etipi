@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @Getter
@@ -37,7 +38,7 @@ public class JWTUtils implements IJWTUtils {
 
         return JWT.create()
                 .withSubject(customUserDetails.getUsername())
-                .withClaim("name", ((CustomUserDetails) customUserDetails).getName())
+                .withClaim("userInfo", Map.of("name", ((CustomUserDetails) customUserDetails).getName()))
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + expiration))
                 .sign(Algorithm.HMAC512(secret));

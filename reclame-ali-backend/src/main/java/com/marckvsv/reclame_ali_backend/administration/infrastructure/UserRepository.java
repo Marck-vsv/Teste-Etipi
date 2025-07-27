@@ -16,23 +16,22 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public User findByID(String username) {
-        return null;
+        return userJPARepository.findById(UUID.fromString(username)).orElse(null);
     }
 
     @Override
-    // todo: Implementar no JPA Repository usando o JPQL
     public UUID getUUIDByCPF(String cpf) {
-        return null;
+        User user = userJPARepository.findByCpf(cpf);
+        return user != null ? user.getUserId() : null;
     }
 
     @Override
-    // todo: Implementar no JPA Repository usando o JPQL
-    public boolean existByCFP() {
-        return false;
+    public boolean existByCPF(String cpf) {
+        return userJPARepository.existsByCpf(cpf);
     }
 
     @Override
     public void save(User user) {
-
+        userJPARepository.save(user);
     }
 }
