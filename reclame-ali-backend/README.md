@@ -93,7 +93,7 @@ A API é versionada com `/api/v1`.
           "password": "securepassword"
         }
         ```
-    *   **Resposta:** `200 OK` com `AuthenticationResponse` (JSON)
+    *   **Resposta:** `200 OK` (JSON)
         ```json
         {
           "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmYmMyODljMS04ZDRiLTQyZGItYmMyYy1iY2Y3OWIyZTJlYmMiLCJ1c2VySW5mbyI6eyJuYW1lIjoiSm9obiBEb2UifSwiaWF0IjoxNzA1MjYwMDAwLCJleHAiOjE3MDUyODg4MDB9.signature"
