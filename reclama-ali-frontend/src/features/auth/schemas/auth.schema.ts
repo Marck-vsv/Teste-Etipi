@@ -22,7 +22,7 @@ export const signUpSchema = z.object({
     .refine(isValidCPF, { message: 'CPF inválido' }),
   name: z.string().min(1, 'Você deve inserir seu nome.'),
   password: z
-    .string()
+    .string({ message: 'O nome não pode estar vazio.' })
     .min(8, { message: 'A senha deve possuir ao menos 8 caracteres.' }),
 });
 
