@@ -62,6 +62,10 @@ src/
                         └── domain/                       // Enums de domínio compartilhados (ex: ComplaintStatus)
 ```
 
+## Diagrama DER
+
+![Diagrama DER](DER_diagram.png)
+
 ## Endpoints da API
 
 A API é versionada com `/api/v1`.
