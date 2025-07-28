@@ -16,9 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-//Todo: Completable Future para não trabalhar com metodos bloqueantes
 //Todo: Realizar Benchmark com K6
-//Todo: Implementar o sistema de roles
 
 @Component
 @AllArgsConstructor

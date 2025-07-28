@@ -9,11 +9,11 @@ import lombok.Setter;
 @Setter
 public class CreateComplaintCommand extends BaseCommand {
 
-    public CreateComplaintCommand(CreateComplaintRequest request, String jwt) {
-        this.jwt = jwt;
+    public CreateComplaintCommand(CreateComplaintRequest request, String userId) {
+        this.userId = userId;
         this.createComplaintRequest = request;
     }
 
-    private String jwt;
+    private String userId;
     CreateComplaintRequest createComplaintRequest;
 }

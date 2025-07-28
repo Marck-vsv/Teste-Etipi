@@ -23,7 +23,7 @@ public class ComplaintsApplicationClient implements IComplaintApplication {
 
     @Override
     public void createComplaint(CreateComplaintCommand command) {
-        UUID userID = UUID.fromString(jwtUtils.extractUsername(command.getJwt()));
+        UUID userID = UUID.fromString(command.getUserId());
 
         repository.createCompliant(userID, command.getCreateComplaintRequest());
 
@@ -41,7 +41,7 @@ public class ComplaintsApplicationClient implements IComplaintApplication {
 
     @Override
     public Page<ComplaintResponse> getSummaryPage(PageSummaryQuery query) {
-        UUID userID = UUID.fromString(jwtUtils.extractUsername(query.getJwt()));
+        UUID userID = UUID.fromString(query.getUserId());
 
         return repository.getPage(query, userID);
     }

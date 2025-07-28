@@ -1,5 +1,7 @@
 package com.marckvsv.reclame_ali_backend.complaints.infrastructure;
 
+import com.marckvsv.reclame_ali_backend.administration.application.IUserRepository;
+import com.marckvsv.reclame_ali_backend.administration.infrastructure.models.User;
 import com.marckvsv.reclame_ali_backend.complaints.api.cqrs.commands.DeleteComplaintCommand;
 import com.marckvsv.reclame_ali_backend.complaints.api.cqrs.commands.UpdateComplaintCommand;
 import com.marckvsv.reclame_ali_backend.complaints.api.cqrs.query.PageSummaryQuery;
@@ -29,6 +31,7 @@ import java.util.UUID;
 public class ComplaintsRepository implements IComplaintRepository {
 
     private final JPAComplaintRepository repository;
+    private final IUserRepository userRepository;
 
     @Override
     public ComplaintResponse findById(UUID complainID) {
@@ -41,8 +44,8 @@ public class ComplaintsRepository implements IComplaintRepository {
 
         Complaint complaint = repository.findById(complaintID).orElseThrow(() -> new ComplaintNotFoundException(HttpStatus.NOT_FOUND, "Complaint with uuid: " + complaintID + " not found"));
 
-        if (complaint.getStatus() != ComplaintStatus.PENDENTE) {
-            throw new InvalidComplaintStatusForDeletionException(HttpStatus.CONFLICT, "Complaint with uuid: " + complaintID + " can only be deleted if its status is PENDENTE.");
+        if (complaint.getComplaintStatus() != ComplaintStatus.PENDENTE) {
+            throw new InvalidComplaintStatusForDeletionException(HttpStatus.CONFLICT, "Complaint with uuid: " + complaintID + " can only be deleted if its complaintStatus is PENDENTE.");
         }
 
         repository.deleteById(command.getComplaintUUID());
@@ -53,7 +56,8 @@ public class ComplaintsRepository implements IComplaintRepository {
         var pageable = PageRequest.of(query.getPage(), query.getSize());
 
         Complaint exampleObjectForSearch = new Complaint();
-        exampleObjectForSearch.setUserId(userID);
+        exampleObjectForSearch.setUser(new User());
+        exampleObjectForSearch.getUser().setUserId(userID);
 
         ExampleMatcher exampleMatcher = ExampleMatcher.matching()
                 .withIgnoreNullValues();
@@ -63,7 +67,12 @@ public class ComplaintsRepository implements IComplaintRepository {
 
     @Override
     public void createCompliant(UUID userID, CreateComplaintRequest request) {
-        var compliant = new Complaint(userID, request.getTitle(), request.getDescription(), ComplaintStatus.PENDENTE);
+        var compliant = new Complaint();
+        compliant.setUser(userRepository.findByID(userID.toString()));
+        compliant.setComplaintStatus(ComplaintStatus.PENDENTE);
+        compliant.setDescription(request.getDescription());
+        compliant.setTitle(request.getTitle());
+
         repository.save(compliant);
     }
 
@@ -73,14 +82,19 @@ public class ComplaintsRepository implements IComplaintRepository {
 
         Complaint complaintEntity = repository.findById(complaintID).orElseThrow(() -> new ApplicationValidationException(HttpStatus.NOT_FOUND, "Complaint with UUID: " + complaintID + " not found"));
 
-        if (complaintEntity.getStatus() != ComplaintStatus.PENDENTE) {
-            throw new InvalidComplaintStatusForUpdateException(HttpStatus.CONFLICT, "Complaint with id " + complaintID + " can only be deleted if its status is PENDENTE.");
+        if (complaintEntity.getComplaintStatus() != ComplaintStatus.PENDENTE) {
+            throw new InvalidComplaintStatusForUpdateException(HttpStatus.CONFLICT, "Complaint with id " + complaintID + " can only be deleted if its complaintStatus is PENDENTE.");
         }
 
         DomainComplaint complaint = Complaint.domainComplaintMapper(complaintEntity);
 
+        if (command.getRequest().getComplaintStatus() == null) {
+            command.getRequest().setComplaintStatus(complaintEntity.getComplaintStatus());
+        }
+
         complaint.updateData(command.getRequest());
 
-        return ComplaintResponse.createResponse(repository.save(Complaint.complaintMapper(complaint)));
+
+        return ComplaintResponse.createResponse(repository.save(Complaint.complaintMapper(complaint, complaintEntity.getUser())));
     }
 }

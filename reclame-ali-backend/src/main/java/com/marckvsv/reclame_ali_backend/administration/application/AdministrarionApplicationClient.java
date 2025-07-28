@@ -3,10 +3,13 @@ package com.marckvsv.reclame_ali_backend.administration.application;
 import com.marckvsv.reclame_ali_backend.administration.api.IUserApplication;
 import com.marckvsv.reclame_ali_backend.administration.api.command.CreateAccountCommand;
 import com.marckvsv.reclame_ali_backend.administration.api.command.CreateAuthenticationTokenCommand;
+import com.marckvsv.reclame_ali_backend.administration.infrastructure.exceptions.IncorrectCredentialsException;
+import com.marckvsv.reclame_ali_backend.administration.infrastructure.models.Role;
 import com.marckvsv.reclame_ali_backend.administration.infrastructure.models.User;
 import com.marckvsv.reclame_ali_backend.administration.security.configuration.jwt.IJWTUtils;
 import com.marckvsv.reclame_ali_backend.administration.security.configuration.userDetails.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,20 +29,18 @@ public class AdministrarionApplicationClient implements IUserApplication {
     private final PasswordEncoder bCryptPasswordEncoder;
     private final PasswordEncoder passwordEncoder;
 
-    //Todo: Verificar melhor as relações entre as camadas
     @Override
     public String createAuthenticationToken(CreateAuthenticationTokenCommand command) {
         String userID = userRepository.getUUIDByCPF(command.getLoginRequest().getCpf()).toString();
 
-        //todo: verificar se catch nao vira handler global
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userID, command.getLoginRequest().getPassword()));
 
         } catch (BadCredentialsException e) {
-
+            throw new IncorrectCredentialsException(HttpStatus.UNAUTHORIZED ,"Incorrect CPF or password");
         } catch (Exception e) {
-
+            throw new RuntimeException(e);
         }
 
         final UserDetails userDetails = customUserDetailsService.loadUserByUsername(userID);
@@ -60,6 +61,11 @@ public class AdministrarionApplicationClient implements IUserApplication {
         user.setName(command.getCreateAccountRequest().getName());
         user.setCpf(command.getCreateAccountRequest().getCpf());
         user.setPassword(encodedPassword);
+
+        Role role = new Role();
+        role.setName("ROLE_USER");
+
+        user.addRole(role);
 
         userRepository.save(user);
 

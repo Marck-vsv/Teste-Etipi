@@ -8,10 +8,13 @@ import com.marckvsv.reclame_ali_backend.complaints.api.cqrs.query.PageSummaryQue
 import com.marckvsv.reclame_ali_backend.complaints.api.dto.ComplaintResponse;
 import com.marckvsv.reclame_ali_backend.complaints.api.dto.CreateComplaintRequest;
 import com.marckvsv.reclame_ali_backend.complaints.api.dto.UpdateComplaintRequest;
+import com.marckvsv.reclame_ali_backend.sharedKernel.application.validation.Update;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -24,8 +27,9 @@ public class ComplaintController {
     private final IComplaintApplication application;
 
     @PostMapping
-    public ResponseEntity<Void> create(@Valid @RequestBody CreateComplaintRequest request, @RequestHeader(name = "Authorization") String jwt) {
-        var command = new CreateComplaintCommand(request, jwt);
+    public ResponseEntity<Void> create(@Valid @RequestBody CreateComplaintRequest request, Authentication authentication) {
+        String userId = authentication.getName();
+        var command = new CreateComplaintCommand(request, userId);
 
         application.createComplaint(command);
 
@@ -33,8 +37,9 @@ public class ComplaintController {
     }
 
     @GetMapping("/summary")
-    public ResponseEntity<Page<ComplaintResponse>> pageableSummary(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size, @RequestHeader(name = "Authorization") String jwt) {
-        var pageSummaryQuery = new PageSummaryQuery(page, size, jwt);
+    public ResponseEntity<Page<ComplaintResponse>> pageableSummary(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size, Authentication authentication) {
+        String userId = authentication.getName();
+        var pageSummaryQuery = new PageSummaryQuery(page, size, userId);
 
         return ResponseEntity.ok(application.getSummaryPage(pageSummaryQuery));
     }

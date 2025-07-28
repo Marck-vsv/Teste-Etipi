@@ -18,10 +18,10 @@ public class ComplaintResponse {
     UUID uuid;
     String title;
     String description;
-    ComplaintStatus status;
+    ComplaintStatus complaintStatus;
     LocalDateTime createdAt;
 
     public static ComplaintResponse createResponse(Complaint complaint) {
-        return new ComplaintResponse(complaint.getComplaintId(), complaint.getTitle(), complaint.getDescription(), complaint.getStatus(), complaint.getCreatedAt());
+        return new ComplaintResponse(complaint.getComplaintId(), complaint.getTitle(), complaint.getDescription(), complaint.getComplaintStatus(), complaint.getCreatedAt());
     }
 }

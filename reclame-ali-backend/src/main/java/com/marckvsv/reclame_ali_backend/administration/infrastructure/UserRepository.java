@@ -1,9 +1,11 @@
 package com.marckvsv.reclame_ali_backend.administration.infrastructure;
 
 import com.marckvsv.reclame_ali_backend.administration.application.IUserRepository;
+import com.marckvsv.reclame_ali_backend.administration.infrastructure.exceptions.UsernameNotFoundException;
 import com.marckvsv.reclame_ali_backend.administration.infrastructure.models.User;
 import com.marckvsv.reclame_ali_backend.administration.infrastructure.repository.UserJPARepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -16,7 +18,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public User findByID(String username) {
-        return userJPARepository.findById(UUID.fromString(username)).orElse(null);
+        return userJPARepository.findById(UUID.fromString(username)).orElseThrow(() -> new UsernameNotFoundException(HttpStatus.NOT_FOUND, "User with id: " + username + " not found"));
     }
 
     @Override
