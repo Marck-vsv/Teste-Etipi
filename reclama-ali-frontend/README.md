@@ -1,6 +1,6 @@
 # Reclama Ali - Frontend
 
-Bem-vindo ao frontend do **Reclama Ali**, uma plataforma robusta e intuitiva para o registro e acompanhamento de reclamações. Desenvolvida com as tecnologias mais modernas, a aplicação oferece uma experiência de usuário fluida e responsiva, garantindo escalabilidade e manutenibilidade através de uma arquitetura bem definida.
+Este é o projeto front-end do **Reclama Ali**, uma plataforma robusta e intuitiva para o registro e acompanhamento de reclamações. Desenvolvida com as tecnologias mais modernas, a aplicação oferece uma experiência de usuário fluida e responsiva, garantindo escalabilidade e manutenibilidade através de uma arquitetura bem definida.
 
 ## 📖 Índice
 
