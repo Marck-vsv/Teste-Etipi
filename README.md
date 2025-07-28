@@ -17,7 +17,7 @@ Para executar a aplicação completa (frontend, backend e banco de dados), siga 
 
    ```bash
    git clone https://github.com/Marck-vsv/Teste-Etipi.git
-   cd teste-tec
+   cd Teste-Etipi
    ```
 
 2. **Execute o Docker Compose:**
