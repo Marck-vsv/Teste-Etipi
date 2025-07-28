@@ -13,10 +13,7 @@ export function useSignUpMutation() {
       window.location.reload();
     },
     onError: (error) => {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : 'Erro ao tentar criar sua conta, tente novamente mais tarde!';
+      const errorMessage = 'Erro ao tentar criar sua conta, tente novamente mais tarde!';
       toast.error('Ops! Algo deu errado', {
         description: errorMessage,
       });
