@@ -2,7 +2,7 @@
 
 ## Visão Geral do Projeto
 
-O "Reclame Ali Backend" é uma aplicação Java Spring Boot desenvolvida para gerenciar reclamações de usuários. Ele oferece uma API robusta para registro de usuários, autenticação e o ciclo de vida completo das reclamações (criação, listagem, visualização de detalhes, atualização e exclusão). Este backend serve como a base para um sistema de gerenciamento de reclamações, destinado a ser consumido por uma aplicação frontend separada (por exemplo, construída com React).
+O "Reclame Ali Backend" é uma aplicação Java Spring Boot desenvolvida para gerenciar reclamações de usuários. Ele oferece uma API robusta para registro de usuários, autenticação e o ciclo de vida completo das reclamações (criação, listagem, visualização de detalhes, atualização e exclusão). Este backend serve como a base para um sistema de gerenciamento de reclamações, destinado a ser consumido por uma aplicação frontend separada construída com React(NextJS).
 
 ## Decisões Arquiteturais
 
