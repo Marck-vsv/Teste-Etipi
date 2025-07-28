@@ -3,7 +3,7 @@ import z from 'zod';
 
 export const signInSchema = z.object({
   cpf: z
-    .string()
+    .string({ message: 'O CPF não pode estar vazio.' })
     .min(11, { message: 'O CPF deve possuir pelo menos 11 digitos.' })
     .max(14, { message: 'O CPF deve possuir pelo menos 11 digitos.' })
     .transform((val) => val.replace(/[^\d]/g, ''))
@@ -15,7 +15,7 @@ export const signInSchema = z.object({
 
 export const signUpSchema = z.object({
   cpf: z
-    .string()
+    .string({ message: 'O CPF não pode estar vazio.' })
     .min(11, { message: 'O CPF deve possuir pelo menos 11 digitos.' })
     .max(14, { message: 'O CPF deve possuir pelo menos 11 digitos.' })
     .transform((val) => val.replace(/[^\d]/g, ''))
