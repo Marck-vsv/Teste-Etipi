@@ -4,6 +4,7 @@ import com.marckvsv.reclame_ali_backend.administration.api.command.CreateAccount
 import com.marckvsv.reclame_ali_backend.administration.api.command.CreateAuthenticationTokenCommand;
 import com.marckvsv.reclame_ali_backend.administration.api.dto.CreateAccountRequest;
 import com.marckvsv.reclame_ali_backend.administration.api.dto.LoginRequest;
+import com.marckvsv.reclame_ali_backend.administration.infrastructure.exceptions.NAuthenticationException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
