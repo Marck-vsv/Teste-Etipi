@@ -7,7 +7,7 @@ export const complaintStatusSchema = z.enum([
 ]);
 
 export const complaintSchema = z.object({
-  id: z.string(),
+  uuid: z.string(),
   title: z
     .string()
     .min(1, 'O título é obrigatório.')
@@ -17,7 +17,7 @@ export const complaintSchema = z.object({
     .min(1, 'A descrição é obrigatória.')
     .max(512, 'A descrição não pode ultrapassar 512 caracteres.'),
   createdAt: z.string().or(z.date()),
-  status: complaintStatusSchema,
+  complaintStatus: complaintStatusSchema,
 });
 
 export const createComplaintSchema = complaintSchema.pick({
@@ -29,11 +29,12 @@ export const updateComplaintSchema = complaintSchema
   .pick({
     title: true,
     description: true,
+    complaintStatus: true,
   })
   .partial();
 
 export const updateComplaintStatusSchema = complaintSchema.pick({
-  status: true,
+  complaintStatus: true,
 });
 
 export type Complaint = z.infer<typeof complaintSchema>;
@@ -44,8 +45,10 @@ export type UpdateComplaintStatusRequest = z.infer<
 >;
 export type PaginatedComplaintsResponse = {
   content: Complaint[];
-  totalPages: number;
-  totalElements: number;
-  page: number;
-  size: number;
+  page: {
+    size: number;
+    number: number;
+    totalElements: number;
+    totalPages: number;
+  };
 };

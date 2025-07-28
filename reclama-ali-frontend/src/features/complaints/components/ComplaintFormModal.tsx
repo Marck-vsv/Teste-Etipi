@@ -21,6 +21,8 @@ interface ComplaintFormModalProps {
   complaint?: Complaint;
 }
 
+// Todo: adicionar status
+
 export function ComplaintFormModal({
   isOpen,
   onClose,
@@ -58,7 +60,7 @@ export function ComplaintFormModal({
   const onSubmit = (data: CreateComplaintRequest | UpdateComplaintRequest) => {
     if (isEditing && complaint) {
       updateComplaint(
-        { id: complaint.id, data: data as UpdateComplaintRequest },
+        { id: complaint.uuid, data: data as UpdateComplaintRequest },
         {
           onSuccess: () => onClose(),
         },

@@ -110,7 +110,7 @@ export function SignUpForm() {
         }
       />
 
-      <Button type="submit" isLoading={signUpPending}>
+      <Button className='w-full' type="submit" isLoading={signUpPending}>
         Criar Conta
       </Button>
     </form>

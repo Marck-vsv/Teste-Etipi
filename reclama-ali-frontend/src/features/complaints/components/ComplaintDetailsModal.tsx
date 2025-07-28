@@ -9,7 +9,7 @@ interface ComplaintDetailsModalProps {
   complaint: Complaint;
 }
 
-const getStatusBadgeVariant = (status: Complaint['status']) => {
+const getStatusBadgeVariant = (status: Complaint['complaintStatus']) => {
   switch (status) {
     case 'PENDENTE':
       return 'warning';
@@ -41,8 +41,8 @@ export function ComplaintDetailsModal({
         <div className="flex items-center space-x-4">
           <div>
             <h3 className="text-lg font-semibold text-gray-700">Status:</h3>
-            <Badge variant={getStatusBadgeVariant(complaint.status)}>
-              {complaint.status.replace('_', ' ')}
+            <Badge variant={getStatusBadgeVariant(complaint.complaintStatus)}>
+              {complaint.complaintStatus.replace('_', ' ')}
             </Badge>
           </div>
           <div>

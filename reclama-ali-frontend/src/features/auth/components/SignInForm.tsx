@@ -95,7 +95,7 @@ export function SignInForm() {
         }
       />
 
-      <Button type="submit" isLoading={signInPending}>
+      <Button className='w-full' type="submit" isLoading={signInPending}>
         Entrar
       </Button>
     </form>

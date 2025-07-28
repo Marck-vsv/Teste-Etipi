@@ -4,10 +4,14 @@ import { SignInForm } from '@/features/auth/components/SignInForm';
 import { SignUpForm } from '@/features/auth/components/SignUpForm';
 import { AuthTabs } from '@/features/auth/components/AuthTabs';
 import { Lock } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function AuthScreen() {
   const [activeTab, setActiveTab] = useState<'signin' | 'signup'>('signin');
+
+  useEffect(() => {
+    localStorage.removeItem('authToken');
+  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">

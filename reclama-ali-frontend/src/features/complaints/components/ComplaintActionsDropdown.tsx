@@ -6,7 +6,7 @@ interface ComplaintActionsDropdownProps {
   onEdit: () => void;
   onDelete: () => void;
   onViewDetails: () => void;
-  status: Complaint['status'];
+  status: Complaint['complaintStatus'];
 }
 
 export function ComplaintActionsDropdown({

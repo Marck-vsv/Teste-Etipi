@@ -10,6 +10,7 @@ export function useSignUpMutation() {
     },
     onSuccess: () => {
       toast.success('Conta criada com sucesso!');
+      window.location.reload();
     },
     onError: (error) => {
       const errorMessage =

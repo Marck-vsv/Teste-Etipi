@@ -13,12 +13,10 @@ interface ComplaintSummaryCardProps {
   complaint: Complaint;
 }
 
-const getStatusBadgeVariant = (status: Complaint['status']) => {
+const getStatusBadgeVariant = (status: Complaint['complaintStatus']) => {
   switch (status) {
     case 'PENDENTE':
       return 'warning';
-    case 'EM_ANALISE':
-      return 'secondary';
     case 'RESOLVIDO':
       return 'success';
     case 'FECHADO':
@@ -33,8 +31,7 @@ export function ComplaintSummaryCard({ complaint }: ComplaintSummaryCardProps) {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
-  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
-    useState(false);
+  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] = useState(false);
 
   const truncatedDescription =
     complaint.description.length > 100
@@ -46,7 +43,7 @@ export function ComplaintSummaryCard({ complaint }: ComplaintSummaryCardProps) {
   };
 
   const handleConfirmDelete = () => {
-    mutateDelete(complaint.id);
+    mutateDelete(complaint.uuid);
     setIsConfirmDeleteModalOpen(false);
   };
 
@@ -60,21 +57,21 @@ export function ComplaintSummaryCard({ complaint }: ComplaintSummaryCardProps) {
 
   return (
     <>
-      <Card.Body interactive={false} size="sm" className="w-full">
+      <Card.Body interactive={false} variant={'gradient'} size="sm" className="w-full">
         <Card.Header size="sm">
           <div className="flex justify-between items-center">
             <Card.Title onClick={handleCardClick} className="cursor-pointer">
               {complaint.title}
             </Card.Title>
             <div className="flex items-center space-x-2">
-              <Badge variant={getStatusBadgeVariant(complaint.status)}>
-                {complaint.status.replace('_', ' ')}
+              <Badge variant={getStatusBadgeVariant(complaint.complaintStatus)}>
+                {complaint.complaintStatus.replace('_', ' ')}
               </Badge>
               <ComplaintActionsDropdown
                 onEdit={handleEdit}
                 onDelete={handleDelete}
                 onViewDetails={handleCardClick}
-                status={complaint.status}
+                status={complaint.complaintStatus}
               />
             </div>
           </div>
