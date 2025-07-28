@@ -16,8 +16,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-//Todo: Realizar Benchmark com K6
-
 @Component
 @AllArgsConstructor
 public class JWTRequestFilter extends OncePerRequestFilter {

@@ -45,13 +45,12 @@ public class AdministrarionApplicationClient implements IUserApplication {
 
         final UserDetails userDetails = customUserDetailsService.loadUserByUsername(userID);
 
-        //todo: colocar em um dto em vez de retornar string direto
         return jwtUtils.generateToken(userDetails);
     }
 
     @Override
     public Void createAccount(CreateAccountCommand command) {
-        //Todo: Isso deve ser feito na camada de infra
+        //Todo: Fazer essa lógica na camada de infra
         if (userRepository.existByCPF(command.getCreateAccountRequest().getCpf())) {
             throw new BadCredentialsException("User already exists");
         }
