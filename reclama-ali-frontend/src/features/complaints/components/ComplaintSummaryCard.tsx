@@ -3,11 +3,38 @@ import { Card } from '@/components/ui/Card';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import { Complaint } from '@/features/complaints/schemas/complaint.schema';
 import { formatDate } from '@/utils/formatters';
-import { useState } from 'react';
+import { useReducer } from 'react';
 import { useDeleteComplaint } from '../mutations/use-delete-complaint.mutation';
 import { ComplaintActionsDropdown } from './ComplaintActionsDropdown';
 import { ComplaintDetailsModal } from './ComplaintDetailsModal';
 import { ComplaintFormModal } from './ComplaintFormModal';
+
+interface ModalState {
+  isEditModalOpen: boolean;
+  isDetailsModalOpen: boolean;
+  isConfirmDeleteModalOpen: boolean;
+}
+
+type ModalAction =
+  | { type: 'OPEN_EDIT_MODAL' }
+  | { type: 'OPEN_DETAILS_MODAL' }
+  | { type: 'OPEN_CONFIRM_DELETE_MODAL' }
+  | { type: 'CLOSE_ALL_MODALS' };
+
+function modalReducer(state: ModalState, action: ModalAction): ModalState {
+  switch (action.type) {
+    case 'OPEN_EDIT_MODAL':
+      return { ...state, isEditModalOpen: true, isDetailsModalOpen: false, isConfirmDeleteModalOpen: false };
+    case 'OPEN_DETAILS_MODAL':
+      return { ...state, isDetailsModalOpen: true, isEditModalOpen: false, isConfirmDeleteModalOpen: false };
+    case 'OPEN_CONFIRM_DELETE_MODAL':
+      return { ...state, isConfirmDeleteModalOpen: true, isEditModalOpen: false, isDetailsModalOpen: false };
+    case 'CLOSE_ALL_MODALS':
+      return { isEditModalOpen: false, isDetailsModalOpen: false, isConfirmDeleteModalOpen: false };
+    default:
+      return state;
+  }
+}
 
 interface ComplaintSummaryCardProps {
   complaint: Complaint;
@@ -29,9 +56,11 @@ const getStatusBadgeVariant = (status: Complaint['complaintStatus']) => {
 export function ComplaintSummaryCard({ complaint }: ComplaintSummaryCardProps) {
   const { mutate: mutateDelete, isPending: isDeleting } = useDeleteComplaint();
 
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
-  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] = useState(false);
+  const [modalState, dispatch] = useReducer(modalReducer, {
+    isEditModalOpen: false,
+    isDetailsModalOpen: false,
+    isConfirmDeleteModalOpen: false,
+  });
 
   const truncatedDescription =
     complaint.description.length > 100
@@ -39,20 +68,20 @@ export function ComplaintSummaryCard({ complaint }: ComplaintSummaryCardProps) {
       : complaint.description;
 
   const handleDelete = () => {
-    setIsConfirmDeleteModalOpen(true);
+    dispatch({ type: 'OPEN_CONFIRM_DELETE_MODAL' });
   };
 
   const handleConfirmDelete = () => {
     mutateDelete(complaint.uuid);
-    setIsConfirmDeleteModalOpen(false);
+    dispatch({ type: 'CLOSE_ALL_MODALS' });
   };
 
   const handleEdit = () => {
-    setIsEditModalOpen(true);
+    dispatch({ type: 'OPEN_EDIT_MODAL' });
   };
 
   const handleCardClick = () => {
-    setIsDetailsModalOpen(true);
+    dispatch({ type: 'OPEN_DETAILS_MODAL' });
   };
 
   return (
@@ -87,20 +116,20 @@ export function ComplaintSummaryCard({ complaint }: ComplaintSummaryCardProps) {
       </Card.Body>
 
       <ComplaintFormModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
+        isOpen={modalState.isEditModalOpen}
+        onClose={() => dispatch({ type: 'CLOSE_ALL_MODALS' })}
         complaint={complaint}
       />
 
       <ComplaintDetailsModal
-        isOpen={isDetailsModalOpen}
-        onClose={() => setIsDetailsModalOpen(false)}
+        isOpen={modalState.isDetailsModalOpen}
+        onClose={() => dispatch({ type: 'CLOSE_ALL_MODALS' })}
         complaint={complaint}
       />
 
       <ConfirmationModal
-        isOpen={isConfirmDeleteModalOpen}
-        onClose={() => setIsConfirmDeleteModalOpen(false)}
+        isOpen={modalState.isConfirmDeleteModalOpen}
+        onClose={() => dispatch({ type: 'CLOSE_ALL_MODALS' })}
         onConfirm={handleConfirmDelete}
         title="Confirmar Exclusão"
         message={`Tem certeza que deseja excluir a reclamação? Esta ação não pode ser desfeita.`}

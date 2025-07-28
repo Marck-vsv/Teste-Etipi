@@ -95,7 +95,7 @@ export function ComplaintFormModal({
           error={errors.description?.message}
           isLoading={isLoading}
         />
-        <Button type="submit" isLoading={isLoading}>
+        <Button className='w-full' type="submit" isLoading={isLoading}>
           {isEditing ? 'Salvar Alterações' : 'Criar Reclamação'}
         </Button>
       </form>
