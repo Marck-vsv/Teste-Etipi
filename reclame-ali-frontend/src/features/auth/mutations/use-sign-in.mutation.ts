@@ -16,10 +16,7 @@ export function useSignInMutation() {
       toast.success('Login realizado com sucesso!');
     },
     onError: (error) => {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : 'Erro ao tentar fazer login, tente novamente mais tarde!';
+      const errorMessage = 'Erro ao tentar fazer login, tente novamente mais tarde!';
       toast.error('Ops! Algo deu errado', {
         description: errorMessage,
       });
