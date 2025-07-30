@@ -118,7 +118,7 @@ Crie um arquivo chamado `.env.local` na raiz do projeto e adicione a URL da sua 
 
 ```bash
 # .env.local
-NEXT_PUBLIC_BASE_URL=http://localhost:8080
+NEXT_PUBLIC_BASE_URL=http://localhost:8080/api/v1
 ```
 *Substitua `http://localhost:8080` pela URL correta do seu backend, se necessário.*
 
